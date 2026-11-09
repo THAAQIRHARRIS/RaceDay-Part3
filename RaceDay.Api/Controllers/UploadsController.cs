@@ -40,13 +40,13 @@ public class UploadsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<ImageUploadResponse>> UploadBanner(int id, [FromForm] IFormFile file, CancellationToken cancellationToken)
+    public async Task<ActionResult<ImageUploadResponse>> UploadBanner(int id, [FromForm] ImageUploadRequest request, CancellationToken cancellationToken)
     {
         var ev = await _db.Events.FirstOrDefaultAsync(e => e.EventId == id, cancellationToken);
         if (ev == null) return Fail(StatusCodes.Status404NotFound, "Event not found.");
         if (ev.OrganiserId != CurrentUserId) return Fail(StatusCodes.Status403Forbidden, "You can only change the banner of your own events.");
 
-        var (url, error) = await TryUploadAsync(file, "event-banners", cancellationToken);
+        var (url, error) = await TryUploadAsync(request.File, "event-banners", cancellationToken);
         if (error != null) return error;
 
         var oldUrl = ev.BannerImageUrl;
@@ -69,12 +69,12 @@ public class UploadsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<ImageUploadResponse>> UploadProfileImage([FromForm] IFormFile file, CancellationToken cancellationToken)
+    public async Task<ActionResult<ImageUploadResponse>> UploadProfileImage([FromForm] ImageUploadRequest request, CancellationToken cancellationToken)
     {
         var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == CurrentUserId, cancellationToken);
         if (user == null) return Fail(StatusCodes.Status404NotFound, "User not found.");
 
-        var (url, error) = await TryUploadAsync(file, "profile-images", cancellationToken);
+        var (url, error) = await TryUploadAsync(request.File, "profile-images", cancellationToken);
         if (error != null) return error;
 
         var oldUrl = user.ProfileImageUrl;
