@@ -26,4 +26,4 @@ Azure Blob Storage: Added to the API, not the MVC app. Images are stored in Azur
 Docker: The MVC app runs in a container with a well-structured Dockerfile, and the README has the run command.
 UI design: A sporting RaceDay theme, Bootstrap, colour-coded enrolment statuses, graceful error handling, and a consistent look.
 GitHub and CI/CD: At least 20 meaningful commits, and the workflow updated to build the MVC project as well.
-YouTube link:
+YouTube link: https://youtu.be/Up2vZCKJNc4
