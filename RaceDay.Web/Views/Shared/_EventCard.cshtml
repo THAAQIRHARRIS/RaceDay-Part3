@@ -1,0 +1,21 @@
+@model EventDto
+<div class="card event-card h-100">
+    @if (!string.IsNullOrEmpty(Model.BannerImageUrl))
+    {
+        <img src="@Model.BannerImageUrl" class="event-card-img" alt="Banner for @Model.Name" loading="lazy" />
+    }
+    else
+    {
+        <div class="event-card-img event-card-placeholder" aria-hidden="true"><span>@UiHelpers.TypeIcon(Model.EventType)</span></div>
+    }
+    <div class="card-body d-flex flex-column">
+        <span class="type-pill type-@Model.EventType.ToLowerInvariant()">@Model.EventType</span>
+        <h3 class="h4 mb-2">@Model.Name</h3>
+        <p class="event-meta mb-3">
+            📅 @UiHelpers.FormatDate(Model.EventDate)<br />
+            📍 @Model.Location<br />
+            📏 @UiHelpers.Km(Model.DistanceKm)
+        </p>
+        <a asp-controller="Events" asp-action="Details" asp-route-id="@Model.EventId" class="btn btn-raceday mt-auto">View event</a>
+    </div>
+</div>

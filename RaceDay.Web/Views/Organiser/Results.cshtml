@@ -1,0 +1,66 @@
+@model ResultsPageViewModel
+@{
+    var ev = Model.Event;
+    ViewData["Title"] = "Results";
+}
+
+<a asp-action="Events" class="text-decoration-none">&larr; My events</a>
+<h1 class="mt-2">Results</h1>
+<p class="text-muted mb-4">@ev.Name &middot; @UiHelpers.ShortDate(ev.EventDate)</p>
+
+@if (!Model.EventHasPassed)
+{
+    <div class="alert alert-info">Results can be captured once the event has taken place (@UiHelpers.FormatDateTime(ev.EventDate)).</div>
+}
+
+@if (Model.Rows.Count == 0)
+{
+    <div class="empty-state panel">
+        <div class="big">🏅</div>
+        <h2 class="h4">No participants to score</h2>
+        <p>Entered participants appear here so you can capture their finish times.</p>
+    </div>
+}
+else
+{
+    <p class="text-muted">Saving a result publishes it straight away on the participant's <em>My results</em> page. Enter the time as hours:minutes:seconds, e.g. 03:45:12.</p>
+
+    @foreach (var row in Model.Rows)
+    {
+        <div class="panel mb-3">
+            <form asp-action="SaveResult" method="post">
+                <input type="hidden" name="EventId" value="@ev.EventId" />
+                <input type="hidden" name="EnrolmentId" value="@row.EnrolmentId" />
+                <input type="hidden" name="ResultId" value="@row.ResultId" />
+
+                <div class="row g-3 align-items-end">
+                    <div class="col-lg-3">
+                        <div class="fw-semibold">@row.ParticipantName</div>
+                        <small class="text-muted">@row.CategoryName</small>
+                        <div class="mt-1"><partial name="_StatusBadge" model="row.EnrolmentStatus" /></div>
+                    </div>
+                    <div class="col-6 col-lg-2">
+                        <label class="form-label" for="time-@row.EnrolmentId">Finish time</label>
+                        <input id="time-@row.EnrolmentId" name="FinishTime" value="@row.FinishTime" class="form-control" placeholder="hh:mm:ss"
+                               pattern="\d{1,2}:[0-5]\d:[0-5]\d" title="Hours:minutes:seconds, e.g. 03:45:12" required disabled="@(!Model.EventHasPassed)" />
+                    </div>
+                    <div class="col-6 col-lg-2">
+                        <label class="form-label" for="pos-@row.EnrolmentId">Position</label>
+                        <input id="pos-@row.EnrolmentId" name="FinishPosition" value="@row.FinishPosition" type="number" min="1" class="form-control" required disabled="@(!Model.EventHasPassed)" />
+                    </div>
+                    <div class="col-6 col-lg-2">
+                        <label class="form-label" for="tot-@row.EnrolmentId">Total finishers</label>
+                        <input id="tot-@row.EnrolmentId" name="TotalFinishers" value="@row.TotalFinishers" type="number" min="1" class="form-control" required disabled="@(!Model.EventHasPassed)" />
+                    </div>
+                    <div class="col-6 col-lg-3 d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-raceday" disabled="@(!Model.EventHasPassed)">@(row.ResultId.HasValue ? "Update result" : "Save result")</button>
+                        @if (row.ResultId.HasValue)
+                        {
+                            <span class="badge text-bg-success">Published</span>
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+}

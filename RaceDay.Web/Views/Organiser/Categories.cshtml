@@ -1,0 +1,84 @@
+@model CategoriesPageViewModel
+@{
+    var ev = Model.Event;
+    ViewData["Title"] = "Categories";
+    var categories = ev.Categories ?? new List<CategoryDto>();
+}
+
+<a asp-action="Events" class="text-decoration-none">&larr; My events</a>
+<h1 class="mt-2">Categories</h1>
+<p class="text-muted mb-4">@ev.Name &middot; @UiHelpers.ShortDate(ev.EventDate)</p>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="panel p-0">
+            @if (categories.Count == 0)
+            {
+                <div class="empty-state">
+                    <div class="big">🏷️</div>
+                    <p>No categories yet. Add age or distance categories so participants can enter.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-raceday">
+                        <thead><tr><th>Category</th><th>Ages</th><th>Distance</th><th></th></tr></thead>
+                        <tbody>
+                            @foreach (var c in categories)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@c.CategoryName</td>
+                                    <td>@UiHelpers.AgeRange(c.MinAge, c.MaxAge)</td>
+                                    <td>@(c.DistanceKm.HasValue ? UiHelpers.Km(c.DistanceKm.Value) : "Event distance")</td>
+                                    <td class="text-end">
+                                        <form asp-action="DeleteCategory" asp-route-eventId="@ev.EventId" asp-route-id="@c.CategoryId" method="post" class="d-inline"
+                                              onsubmit="return confirm('Remove this category?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="panel">
+            <h2 class="h4">Add a category</h2>
+            <form asp-action="AddCategory" asp-route-eventId="@ev.EventId" method="post" novalidate>
+                <div class="mb-3">
+                    <label asp-for="Form.CategoryName" class="form-label"></label>
+                    <input asp-for="Form.CategoryName" class="form-control" placeholder="e.g. Under 20, Senior, 21km" />
+                    <span asp-validation-for="Form.CategoryName" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label asp-for="Form.MinAge" class="form-label"></label>
+                        <input asp-for="Form.MinAge" type="number" min="0" max="120" class="form-control" />
+                        <span asp-validation-for="Form.MinAge" class="text-danger"></span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label asp-for="Form.MaxAge" class="form-label"></label>
+                        <input asp-for="Form.MaxAge" type="number" min="0" max="120" class="form-control" />
+                        <span asp-validation-for="Form.MaxAge" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Form.DistanceKm" class="form-label"></label>
+                    <input asp-for="Form.DistanceKm" type="number" step="0.01" min="0.01" class="form-control" />
+                    <div class="form-text">Optional. Leave blank to use the event's distance.</div>
+                    <span asp-validation-for="Form.DistanceKm" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-raceday w-100">Add category</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

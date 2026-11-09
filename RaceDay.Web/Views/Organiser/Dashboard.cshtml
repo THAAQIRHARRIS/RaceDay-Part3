@@ -1,0 +1,93 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Organiser dashboard";
+    var upcoming = Model.Upcoming.ToList();
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <h1 class="mb-0">Organiser dashboard</h1>
+    <a asp-action="CreateEvent" class="btn btn-raceday">+ Create event</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-4">
+        <div class="stat-card">
+            <div class="stat-value">@Model.Events.Count</div>
+            <div class="stat-label">Events created</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="stat-card lime">
+            <div class="stat-value">@upcoming.Count</div>
+            <div class="stat-label">Upcoming events</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="stat-card navy">
+            <div class="stat-value">@Model.TotalEnrolments</div>
+            <div class="stat-label">Total enrolments</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="panel p-0">
+            <div class="p-3 pb-0"><h2 class="h4">Enrolments per event</h2></div>
+            @if (Model.Events.Count == 0)
+            {
+                <div class="empty-state">
+                    <div class="big">🏁</div>
+                    <p>You haven't created any events yet.</p>
+                    <a asp-action="CreateEvent" class="btn btn-raceday">Create your first event</a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-raceday table-hover">
+                        <thead><tr><th>Event</th><th>Date</th><th class="text-center">Enrolments</th><th></th></tr></thead>
+                        <tbody>
+                            @foreach (var e in Model.Events.OrderBy(x => x.EventDate))
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId" class="fw-semibold text-decoration-none">@e.Name</a><br />
+                                        <small class="text-muted">@UiHelpers.TypeIcon(e.EventType) @e.EventType, @UiHelpers.Km(e.DistanceKm)</small>
+                                    </td>
+                                    <td>@UiHelpers.ShortDate(e.EventDate)</td>
+                                    <td class="text-center"><span class="fw-bold">@e.EnrolmentCount</span></td>
+                                    <td class="text-end">
+                                        <a asp-action="Enrolments" asp-route-eventId="@e.EventId" class="btn btn-sm btn-outline-raceday">Enrolments</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel">
+            <h2 class="h4">Coming up</h2>
+            @if (upcoming.Count == 0)
+            {
+                <p class="text-muted mb-0">No upcoming events scheduled.</p>
+            }
+            else
+            {
+                <ul class="list-unstyled mb-0">
+                    @foreach (var e in upcoming.Take(5))
+                    {
+                        <li class="d-flex justify-content-between align-items-start py-2 border-bottom">
+                            <span><strong>@e.Name</strong><br /><small class="text-muted">@e.Location</small></span>
+                            <span class="badge text-bg-warning">@UiHelpers.ShortDate(e.EventDate)</span>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>

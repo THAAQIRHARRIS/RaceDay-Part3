@@ -1,0 +1,131 @@
+/* RaceDay brand: night-sky navy + race-day orange + a sprinkle of lime. One stylesheet, used by every page. */
+:root {
+  --rd-navy: #0b1d3a;
+  --rd-navy-2: #14305c;
+  --rd-orange: #ff5a1f;
+  --rd-orange-dark: #e04a12;
+  --rd-lime: #c8f135;
+  --rd-bg: #f4f6fb;
+  --rd-text: #1b2536;
+  --rd-muted: #6b7587;
+  --rd-radius: 14px;
+}
+
+html { font-size: 16px; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--rd-bg);
+  color: var(--rd-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main { flex: 1 0 auto; }
+
+h1, h2, h3, h4, .brand, .display-title, .stat-value {
+  font-family: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+h1, .display-title { text-transform: uppercase; font-style: italic; }
+
+/* ---------- navbar ---------- */
+.rd-navbar { background: var(--rd-navy); border-bottom: 4px solid var(--rd-orange); }
+.rd-navbar .brand { color: #fff; font-size: 1.9rem; text-transform: uppercase; font-style: italic; text-decoration: none; }
+.rd-navbar .brand span { color: var(--rd-orange); }
+.rd-navbar .nav-link { color: rgba(255,255,255,.82); font-weight: 500; padding: .6rem .9rem; border-radius: 8px; }
+.rd-navbar .nav-link:hover { color: #fff; background: rgba(255,255,255,.08); }
+.rd-navbar .nav-link.active { color: var(--rd-navy); background: var(--rd-lime); }
+.rd-navbar .navbar-toggler { border-color: rgba(255,255,255,.4); }
+.rd-navbar .navbar-toggler-icon { filter: invert(1); }
+.role-pill { background: var(--rd-lime); color: var(--rd-navy); font-size: .7rem; font-weight: 700; text-transform: uppercase; padding: .15rem .55rem; border-radius: 999px; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--rd-orange); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: .85rem; }
+
+/* ---------- hero ---------- */
+.hero {
+  background:
+    repeating-linear-gradient(115deg, rgba(255,255,255,.05) 0 18px, transparent 18px 36px),
+    linear-gradient(120deg, var(--rd-navy) 0%, var(--rd-navy-2) 60%, #1d4a8a 100%);
+  color: #fff;
+  border-radius: var(--rd-radius);
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after { content: ""; position: absolute; right: -40px; top: -40px; width: 220px; height: 220px; background: var(--rd-orange); opacity: .9; transform: rotate(25deg); border-radius: 28px; }
+.hero > * { position: relative; z-index: 1; }
+.hero h1 { font-size: 3rem; line-height: 1; margin-bottom: .5rem; }
+.hero p { color: rgba(255,255,255,.85); max-width: 34rem; }
+.hero .highlight { color: var(--rd-lime); }
+
+/* ---------- buttons ---------- */
+.btn-raceday { background: var(--rd-orange); border: 0; color: #fff; font-weight: 600; border-radius: 10px; padding: .55rem 1.2rem; }
+.btn-raceday:hover, .btn-raceday:focus { background: var(--rd-orange-dark); color: #fff; }
+.btn-outline-raceday { border: 2px solid var(--rd-navy); color: var(--rd-navy); font-weight: 600; border-radius: 10px; background: transparent; }
+.btn-outline-raceday:hover { background: var(--rd-navy); color: #fff; }
+.btn-lime { background: var(--rd-lime); color: var(--rd-navy); font-weight: 700; border: 0; border-radius: 10px; }
+.btn-lime:hover { background: #b7de25; color: var(--rd-navy); }
+
+/* ---------- cards ---------- */
+.card { border: 0; border-radius: var(--rd-radius); box-shadow: 0 2px 10px rgba(11,29,58,.08); overflow: hidden; }
+.panel { background: #fff; border-radius: var(--rd-radius); box-shadow: 0 2px 10px rgba(11,29,58,.08); padding: 1.5rem; }
+.event-card { transition: transform .15s ease, box-shadow .15s ease; }
+.event-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(11,29,58,.16); }
+.event-card-img { width: 100%; height: 170px; object-fit: cover; display: block; }
+.event-card-placeholder {
+  display: flex; align-items: center; justify-content: center; font-size: 3.2rem;
+  background: repeating-linear-gradient(115deg, rgba(255,255,255,.07) 0 14px, transparent 14px 28px), linear-gradient(120deg, var(--rd-navy), var(--rd-navy-2));
+}
+.event-meta { color: var(--rd-muted); font-size: .92rem; line-height: 1.7; }
+.type-pill { display: inline-block; align-self: flex-start; font-size: .72rem; font-weight: 700; text-transform: uppercase; padding: .2rem .65rem; border-radius: 999px; margin-bottom: .5rem; }
+.type-run { background: #ffe3d6; color: #b43a0b; }
+.type-walk { background: #dff5e1; color: #1f7a2e; }
+.type-cycle { background: #dbe8ff; color: #1b4fa8; }
+
+.detail-banner { width: 100%; max-height: 340px; object-fit: cover; border-radius: var(--rd-radius); }
+.detail-banner-placeholder { height: 220px; display: flex; align-items: center; justify-content: center; font-size: 4.5rem; color: #fff;
+  background: repeating-linear-gradient(115deg, rgba(255,255,255,.07) 0 18px, transparent 18px 36px), linear-gradient(120deg, var(--rd-navy), var(--rd-navy-2)); }
+
+/* ---------- enrolment status badges (colour coded) ---------- */
+.status-badge { display: inline-block; font-size: .78rem; font-weight: 700; padding: .3rem .75rem; border-radius: 999px; }
+.status-confirmed { background: #d9f4df; color: #146c2e; }   /* green */
+.status-pending   { background: #fff0c2; color: #8a5a00; }   /* amber */
+.status-cancelled { background: #fadbd8; color: #a1271c; }   /* red   */
+
+/* ---------- tables ---------- */
+.table-raceday { margin-bottom: 0; }
+.table-raceday thead th { background: var(--rd-navy); color: #fff; font-weight: 600; border: 0; white-space: nowrap; }
+.table-raceday tbody td { vertical-align: middle; }
+
+/* ---------- stats ---------- */
+.stat-card { background: #fff; border-radius: var(--rd-radius); padding: 1.2rem 1.4rem; box-shadow: 0 2px 10px rgba(11,29,58,.08); border-left: 6px solid var(--rd-orange); }
+.stat-card.lime { border-left-color: var(--rd-lime); }
+.stat-card.navy { border-left-color: var(--rd-navy); }
+.stat-value { font-size: 2.6rem; line-height: 1; color: var(--rd-navy); }
+.stat-label { color: var(--rd-muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .06em; }
+
+/* ---------- results ---------- */
+.result-card { border-left: 6px solid var(--rd-lime); }
+.result-position { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--rd-orange); }
+.result-time { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--rd-navy); }
+
+/* ---------- forms ---------- */
+.form-label { font-weight: 600; font-size: .9rem; }
+.form-control, .form-select { border-radius: 10px; border: 1.5px solid #d3d9e6; padding: .6rem .8rem; }
+.form-control:focus, .form-select:focus { border-color: var(--rd-orange); box-shadow: 0 0 0 .2rem rgba(255,90,31,.2); }
+.text-danger, .field-validation-error { color: #c0392b !important; font-size: .85rem; }
+.validation-summary-errors ul { margin-bottom: 0; padding-left: 1.1rem; }
+.category-option { border: 2px solid #d3d9e6; border-radius: 12px; padding: .8rem 1rem; cursor: pointer; display: block; transition: border-color .12s, background .12s; }
+.category-option:hover { border-color: var(--rd-orange); }
+.btn-check:checked + .category-option { border-color: var(--rd-orange); background: #fff3ed; }
+
+.profile-avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--rd-lime); background: var(--rd-orange); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 2.4rem; font-weight: 700; }
+
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--rd-muted); }
+.empty-state .big { font-size: 3rem; }
+
+.alert { border: 0; border-radius: 12px; }
+.footer { background: var(--rd-navy); color: rgba(255,255,255,.7); font-size: .88rem; margin-top: 3rem; border-top: 4px solid var(--rd-orange); }
+.footer .brand { color: #fff; font-style: italic; text-transform: uppercase; font-size: 1.2rem; }
+
+@media (max-width: 575px) { .hero h1 { font-size: 2.2rem; } .hero::after { opacity: .35; } }

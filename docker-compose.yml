@@ -1,0 +1,37 @@
+# Full stack in one command:  docker compose up --build
+# Web app: http://localhost:8081      API + Swagger: http://localhost:5080/swagger
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD:-RaceDay_Passw0rd!}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+
+  api:
+    build: ./RaceDay.Api
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db;Database=RaceDayDB;User Id=sa;Password=${SA_PASSWORD:-RaceDay_Passw0rd!};TrustServerCertificate=True"
+      Database__AutoMigrate: "true"
+      AzureBlobStorage__ConnectionString: "${AZURE_STORAGE_CONNECTION_STRING:-}"
+      AzureBlobStorage__ContainerName: "raceday-images"
+      Registration__OrganiserCode: "${ORGANISER_CODE:-RACEDAY-ORG-2026}"
+    ports:
+      - "5080:8080"
+
+  web:
+    build: ./RaceDay.Web
+    depends_on:
+      - api
+    environment:
+      ApiSettings__BaseUrl: "http://api:8080/"
+    ports:
+      - "8081:8080"
+
+volumes:
+  sqldata:

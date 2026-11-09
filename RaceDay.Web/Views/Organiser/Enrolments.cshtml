@@ -1,0 +1,74 @@
+@model EnrolmentsPageViewModel
+@{
+    var ev = Model.Event;
+    ViewData["Title"] = "Enrolments";
+}
+
+<a asp-action="Events" class="text-decoration-none">&larr; My events</a>
+<div class="d-flex flex-wrap justify-content-between align-items-end mt-2 mb-4 gap-2">
+    <div>
+        <h1 class="mb-0">Enrolments</h1>
+        <p class="text-muted mb-0">@ev.Name &middot; @UiHelpers.ShortDate(ev.EventDate)</p>
+    </div>
+    <a asp-action="Results" asp-route-eventId="@ev.EventId" class="btn btn-outline-raceday">Enter results</a>
+</div>
+
+@if (Model.Enrolments.Count == 0)
+{
+    <div class="empty-state panel">
+        <div class="big">🎽</div>
+        <h2 class="h4">No entries yet</h2>
+        <p>Participants who enter this event will appear here.</p>
+    </div>
+}
+else
+{
+    <div class="panel p-0">
+        <div class="table-responsive">
+            <table class="table table-raceday table-hover">
+                <thead><tr><th>Participant</th><th>Category</th><th>Entered</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var e in Model.Enrolments)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@e.ParticipantName</td>
+                            <td>@e.CategoryName</td>
+                            <td>@UiHelpers.ShortDate(e.EnrolmentDate)</td>
+                            <td><partial name="_StatusBadge" model="e.EnrolmentStatus" /></td>
+                            <td class="text-end text-nowrap">
+                                @if (e.EnrolmentStatus != "Confirmed")
+                                {
+                                    <form asp-action="UpdateEnrolmentStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="eventId" value="@ev.EventId" />
+                                        <input type="hidden" name="enrolmentId" value="@e.EnrolmentId" />
+                                        <input type="hidden" name="status" value="Confirmed" />
+                                        <button type="submit" class="btn btn-sm btn-success">Confirm</button>
+                                    </form>
+                                }
+                                @if (e.EnrolmentStatus != "Cancelled")
+                                {
+                                    <form asp-action="UpdateEnrolmentStatus" method="post" class="d-inline"
+                                          onsubmit="return confirm('Cancel this participant\'s entry?');">
+                                        <input type="hidden" name="eventId" value="@ev.EventId" />
+                                        <input type="hidden" name="enrolmentId" value="@e.EnrolmentId" />
+                                        <input type="hidden" name="status" value="Cancelled" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                                    </form>
+                                }
+                                @if (e.EnrolmentStatus != "Pending")
+                                {
+                                    <form asp-action="UpdateEnrolmentStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="eventId" value="@ev.EventId" />
+                                        <input type="hidden" name="enrolmentId" value="@e.EnrolmentId" />
+                                        <input type="hidden" name="status" value="Pending" />
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Set pending</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

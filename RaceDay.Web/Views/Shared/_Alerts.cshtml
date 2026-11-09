@@ -1,0 +1,29 @@
+@if (TempData["Success"] is string successMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @successMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Warning"] is string warningMessage)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @warningMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Error"] is string errorMessage)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @errorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (ViewBag.Error is string pageError)
+{
+    <div class="alert alert-danger" role="alert">@pageError</div>
+}
+@if (ViewBag.Notice is string pageNotice)
+{
+    <div class="alert alert-info" role="alert">@pageNotice</div>
+}
